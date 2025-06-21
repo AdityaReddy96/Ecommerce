@@ -22,8 +22,10 @@ export const AuthRegister = () => {
     dispatch(registerUser(formData)).then((data) => {
       // console.log(data);
       if (data?.payload?.success) {
-        toast(data?.payload?.message)
+        toast(data?.payload?.message);
         navigate("/auth/login");
+      } else {
+        toast.error(data?.payload?.message);
       }
     });
   };

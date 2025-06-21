@@ -1,7 +1,10 @@
 import { CommonForm } from "@/components/common/form";
 import { loginFormControls } from "@/config";
+import { loginUser } from "@/store/auth-slice";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const initialState = {
   email: "",
@@ -10,8 +13,20 @@ const initialState = {
 
 export const AuthLogin = () => {
   const [formData, setFormData] = useState(initialState);
+  const dispatch = useDispatch();
 
-  const onSubmit = () => {};
+  const onSubmit = (event) => {
+    event.preventDefault();
+    dispatch(loginUser(formData)).then((data) => {
+      // console.log(data);
+      if (data?.payload?.success) {
+        toast(data?.payload?.message);
+        // navigate("/auth/login");
+      } else {
+        toast.error(data?.payload?.message);
+      }
+    });
+  };
   return (
     <div className="mx-auto w-full max-w-md space-y-6">
       <div className="text-center">

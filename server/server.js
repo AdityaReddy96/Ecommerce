@@ -4,6 +4,7 @@ import { config } from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import authRegisterRouter from "./routes/auth/auth-routes.js";
+import authLoginRouter from "./routes/auth/auth-routes.js";
 
 const app = express();
 config({ path: "./.env" });
@@ -37,6 +38,7 @@ app.use(
 app.use(cookieParser());
 app.use(express.json());
 app.use("/api/auth", authRegisterRouter);
+app.use("/api/auth", authLoginRouter);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
