@@ -50,7 +50,10 @@ const loginUser = async (req, res) => {
       });
     }
 
-    const checkPasswordMatch = bcrypt.compare(password, checkUser.password);
+    const checkPasswordMatch = await bcrypt.compare(
+      password,
+      checkUser.password
+    );
     if (!checkPasswordMatch) {
       return res.json({
         success: false,
@@ -88,19 +91,33 @@ const loginUser = async (req, res) => {
 
 // logout
 
-const logout = () => {
-  const { username, email } = req.body;
+const logoutUser = (req, res) => {
+  res.clearCookie("token").json({
+    success: true,
+    message: "Logged out succcessfully",
+  });
+};
+
+// auth middleware
+const authMiddleware = (req, res, next) => {
+  const token = req.cookies.token;
+  if (!token) {
+    return res.status(401).json({
+      success: false,
+      message: "Unauthorized user",
+    });   
+  }
 
   try {
+    const decodedToken = jwt.verify(token, "CLIENT_SECRET_KEY");
+    req.user = decodedToken;
+    next();
   } catch (error) {
-    console.log(error);
-    res.status(500).json({
+    res.status(401).json({
       success: false,
-      message: "Internal Server Error",
+      message: "Unauthorized user",
     });
   }
 };
 
-// auth middleware
-
-export { registerUser, loginUser };
+export { registerUser, loginUser, logoutUser, authMiddleware };

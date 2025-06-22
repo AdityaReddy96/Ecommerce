@@ -15,10 +15,23 @@ import { ShoppingHome } from "./pages/shopping-view/home";
 import { ShoppingListing } from "./pages/shopping-view/listing";
 import { CheckAuth } from "./components/common/check-auth";
 import { UnAuthPage } from "./pages/unauth-page";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { checkAuth } from "./store/auth-slice";
 
 export const App = () => {
-  const isAuthenticated = false;
-  const user = null;
+  const { user, isAuthenticated, isLoading } = useSelector(
+    (state) => state.auth
+  );
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(checkAuth());
+  }, [dispatch]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="flex flex-col overflow-hidden bg-white">

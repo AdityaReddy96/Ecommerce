@@ -21,7 +21,6 @@ export const AuthLogin = () => {
       // console.log(data);
       if (data?.payload?.success) {
         toast(data?.payload?.message);
-        // navigate("/auth/login");
       } else {
         toast.error(data?.payload?.message);
       }
