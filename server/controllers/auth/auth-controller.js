@@ -2,8 +2,9 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { User } from "../../models/User.js";
 
-// register
+// User Registration and Saving into database.
 const registerUser = async (req, res) => {
+  // console.log(req.body);
   const { userName, email, password } = req.body;
 
   try {
@@ -15,13 +16,17 @@ const registerUser = async (req, res) => {
         message: "User Already Exists.",
       });
     }
+
     const hashedPassword = await bcrypt.hash(password, 12);
+    // console.log(hashedPassword);
+
     const newUser = new User({
       userName,
       email,
       password: hashedPassword,
     });
     await newUser.save();
+
     res.status(200).json({
       success: true,
       message: "Registration Successfull.",
@@ -35,8 +40,7 @@ const registerUser = async (req, res) => {
   }
 };
 
-// login
-
+// User Login
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
@@ -54,6 +58,7 @@ const loginUser = async (req, res) => {
       password,
       checkUser.password
     );
+
     if (!checkPasswordMatch) {
       return res.json({
         success: false,
@@ -61,6 +66,7 @@ const loginUser = async (req, res) => {
       });
     }
 
+    // Token Generation
     const token = jwt.sign(
       {
         id: checkUser._id,
@@ -71,6 +77,7 @@ const loginUser = async (req, res) => {
       { expiresIn: "1h" }
     );
 
+    // Assigning token to cookie in browser
     res.cookie("token", token, { httpOnly: true, secure: false }).json({
       success: true,
       message: "Logged In Successfully",
@@ -90,7 +97,6 @@ const loginUser = async (req, res) => {
 };
 
 // logout
-
 const logoutUser = (req, res) => {
   res.clearCookie("token").json({
     success: true,
@@ -98,18 +104,20 @@ const logoutUser = (req, res) => {
   });
 };
 
-// auth middleware
+// auth middleware (Verifying user at each route)
 const authMiddleware = (req, res, next) => {
   const token = req.cookies.token;
+
   if (!token) {
     return res.status(401).json({
       success: false,
       message: "Unauthorized user",
-    });   
+    });
   }
 
   try {
     const decodedToken = jwt.verify(token, "CLIENT_SECRET_KEY");
+    // console.log(decodedToken);
     req.user = decodedToken;
     next();
   } catch (error) {

@@ -7,10 +7,13 @@ import authRegisterRouter from "./routes/auth/auth-routes.js";
 import authLoginRouter from "./routes/auth/auth-routes.js";
 
 const app = express();
+
+// Loads environment variable from .env file in root directory
 config({ path: "./.env" });
 
 const PORT = process.env.PORT || 5000;
 
+// Database Connection
 mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => {
@@ -20,6 +23,7 @@ mongoose
     console.log(`Error in connecting the database : ${error}`);
   });
 
+// CORS Configuration
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -40,6 +44,7 @@ app.use(express.json());
 app.use("/api/auth", authRegisterRouter);
 app.use("/api/auth", authLoginRouter);
 
+// server connection
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
