@@ -23,7 +23,6 @@ export const App = () => {
   const { user, isAuthenticated, isLoading } = useSelector(
     (state) => state.auth
   );
-  
   const dispatch = useDispatch();
 
   useEffect(() => {
