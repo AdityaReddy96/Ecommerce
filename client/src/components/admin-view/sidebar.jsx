@@ -28,9 +28,8 @@ const adminSideBarMenuItems = [
   },
 ];
 
-const MenuItems = ({ setOpen }) => {
+export const MenuItems = ({ setOpen }) => {
   const navigate = useNavigate();
-  console.log("Sidebar-MenuItem :", setOpen);
 
   return (
     <nav className="mt-8 flex-col flex gap-2">
@@ -55,7 +54,6 @@ const MenuItems = ({ setOpen }) => {
 
 export const AdminSideBar = ({ open, setOpen }) => {
   const navigate = useNavigate();
-  console.log("AdminSidebar :", open);
 
   return (
     <>
@@ -82,7 +80,7 @@ export const AdminSideBar = ({ open, setOpen }) => {
           <ChartNoAxesCombined size={30} />
           <h1 className="text-2xl font-extrabold">Admin Panel</h1>
         </div>
-        <MenuItems />
+        <MenuItems setOpen={setOpen} />
       </aside>
     </>
   );

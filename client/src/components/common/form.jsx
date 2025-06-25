@@ -2,6 +2,7 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import {
+  SelectItem,
   Select,
   SelectContent,
   SelectTrigger,
@@ -58,7 +59,7 @@ export const CommonForm = ({
             value={value}
           >
             <SelectTrigger className="w-full">
-              <SelectValue placeholder={getControlItem.placeholder} />
+              <SelectValue placeholder={getControlItem.label} />
             </SelectTrigger>
             <SelectContent>
               {getControlItem.options && getControlItem.options.length > 0
@@ -78,7 +79,7 @@ export const CommonForm = ({
 
       case types.TEXTAREA:
         element = (
-          <Input
+          <Textarea
             name={getControlItem.name}
             placeholder={getControlItem.placeholder}
             id={getControlItem.name}
@@ -97,7 +98,7 @@ export const CommonForm = ({
 
       default:
         element = (
-          <Textarea
+          <Input
             name={getControlItem.name}
             placeholder={getControlItem.placeholder}
             id={getControlItem.id}

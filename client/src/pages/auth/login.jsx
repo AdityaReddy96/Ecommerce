@@ -20,7 +20,7 @@ export const AuthLogin = () => {
     dispatch(loginUser(formData)).then((data) => {
       // console.log(data);
       if (data?.payload?.success) {
-        toast(data?.payload?.message);
+        toast.success(data?.payload?.message);
       } else {
         toast.error(data?.payload?.message);
       }
