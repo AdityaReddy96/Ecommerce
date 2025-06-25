@@ -96,7 +96,7 @@ const loginUser = async (req, res) => {
   }
 };
 
-// logout
+// Logout
 const logoutUser = (req, res) => {
   res.clearCookie("token").json({
     success: true,
@@ -104,7 +104,7 @@ const logoutUser = (req, res) => {
   });
 };
 
-// auth middleware (Verifying user at each route)
+// Auth Middleware (Verifying user at each route)
 const authMiddleware = (req, res, next) => {
   const token = req.cookies.token;
 

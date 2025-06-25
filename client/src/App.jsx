@@ -18,6 +18,7 @@ import { UnAuthPage } from "./pages/unauth-page";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { checkAuth } from "./store/auth-slice";
+import { Loader } from "lucide-react";
 
 export const App = () => {
   const { user, isAuthenticated, isLoading } = useSelector(
@@ -30,7 +31,11 @@ export const App = () => {
   }, [dispatch]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen w-full">
+        <Loader size={40} />
+      </div>
+    );
   }
 
   return (
