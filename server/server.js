@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import authRegisterRouter from "./routes/auth/auth-routes.js";
 import authLoginRouter from "./routes/auth/auth-routes.js";
+import adminProductRouter from "./routes/admin/products-routes.js";
 
 const app = express();
 
@@ -43,6 +44,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use("/api/auth", authRegisterRouter);
 app.use("/api/auth", authLoginRouter);
+app.use("/api/admin/products", adminProductRouter);
 
 // server connection
 app.listen(PORT, () => {

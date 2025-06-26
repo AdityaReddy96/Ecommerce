@@ -22,16 +22,19 @@ const initialFormData = {
   totalStock: "",
 };
 
-const onSubmit = (event) => {
-  event.preventDefault();
-  toast.success("Product Added");
-};
-
 export const AdminProducts = () => {
   const [openProducts, setOpenProducts] = useState(false);
   const [formData, setFormData] = useState(initialFormData);
   const [imageFile, setImageFile] = useState(null);
   const [uploadedImageUrl, setUploadedImageUrl] = useState("");
+
+  // console.log(formData);
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    toast.success("Product Added");
+  };
+
   return (
     <>
       <div className="mb-5 w-full flex justify-end">
