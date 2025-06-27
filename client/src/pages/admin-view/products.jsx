@@ -8,7 +8,9 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { addProductsFormElements } from "@/config";
-import { useState } from "react";
+import { addNewProduct, getAllProducts } from "@/store/admin/product-slice";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 
 const initialFormData = {
@@ -27,13 +29,36 @@ export const AdminProducts = () => {
   const [formData, setFormData] = useState(initialFormData);
   const [imageFile, setImageFile] = useState(null);
   const [uploadedImageUrl, setUploadedImageUrl] = useState("");
+  const [imageLoaderState, setImageLoaderState] = useState(false);
+  const { productList } = useSelector((state) => state.adminProducts);
+  const dispatch = useDispatch();
 
   // console.log(formData);
 
   const onSubmit = (event) => {
     event.preventDefault();
-    toast.success("Product Added");
+    dispatch(
+      addNewProduct({
+        ...formData,
+        image: uploadedImageUrl,
+      })
+    ).then((data) => {
+      // console.log(data);
+      if (data?.payload?.success) {
+        dispatch(getAllProducts);
+        setImageFile(null);
+        setOpenProducts(false);
+        setFormData(initialFormData);
+        toast.success("Product Added");
+      }
+    });
   };
+
+  useEffect(() => {
+    dispatch(getAllProducts());
+  }, [dispatch]);
+
+  console.log(productList, uploadedImageUrl, "productList");
 
   return (
     <>
@@ -60,6 +85,8 @@ export const AdminProducts = () => {
             setImageFile={setImageFile}
             uploadedImageUrl={uploadedImageUrl}
             setUploadedImageUrl={setUploadedImageUrl}
+            setImageLoaderState={setImageLoaderState}
+            imageLoaderState={imageLoaderState}
           />
           <div className="py-6">
             <CommonForm

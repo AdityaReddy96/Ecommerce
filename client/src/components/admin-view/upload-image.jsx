@@ -1,15 +1,24 @@
-import { FileIcon, UploadCloudIcon, XIcon } from "lucide-react";
+import {
+  Ellipsis,
+  FileIcon,
+  Loader,
+  UploadCloudIcon,
+  XIcon,
+} from "lucide-react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { useEffect, useRef } from "react";
 import { Button } from "../ui/button";
 import axios from "axios";
+import { SpinnerLoader } from "@/assets/loader";
 
 export const ProductImageUpload = ({
   imageFile,
   setImageFile,
   uploadedImageUrl,
   setUploadedImageUrl,
+  imageLoaderState,
+  setImageLoaderState,
 }) => {
   const inputRef = useRef(null);
 
@@ -36,6 +45,8 @@ export const ProductImageUpload = ({
   };
 
   const uploadImageToCloudinary = async () => {
+  setImageLoaderState(true);
+  try {
     const data = new FormData();
     data.append("my_file", imageFile);
     const response = await axios.post(
@@ -46,7 +57,12 @@ export const ProductImageUpload = ({
     if (response?.data?.success) {
       setUploadedImageUrl(response.data.result.url);
     }
-  };
+  } catch (error) {
+    console.error("Image upload failed", error);
+  } finally {
+    setImageLoaderState(false); // Always stop loader
+  }
+};
 
   useEffect(() => {
     if (imageFile != null) {
@@ -77,6 +93,8 @@ export const ProductImageUpload = ({
             <UploadCloudIcon className="w-10 h-10 text-muted-foreground mb-2" />
             <span>Drag and Drop or click to upload the image</span>
           </Label>
+        ) : imageLoaderState ? (
+          <SpinnerLoader className="h-10 flex items-center justify-center" />
         ) : (
           <div className="flex items-center justify-between">
             <div className="flex items-center">
