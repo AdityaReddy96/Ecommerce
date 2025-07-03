@@ -1,3 +1,4 @@
+import { AdminProductTile } from "@/components/admin-view/product-tile";
 import { ProductImageUpload } from "@/components/admin-view/upload-image";
 import { CommonForm } from "@/components/common/form";
 import { Button } from "@/components/ui/button";
@@ -30,6 +31,8 @@ export const AdminProducts = () => {
   const [imageFile, setImageFile] = useState(null);
   const [uploadedImageUrl, setUploadedImageUrl] = useState("");
   const [imageLoaderState, setImageLoaderState] = useState(false);
+  const [currEditingId, setcurrEditingId] = useState(null);
+
   const { productList } = useSelector((state) => state.adminProducts);
   const dispatch = useDispatch();
 
@@ -58,25 +61,40 @@ export const AdminProducts = () => {
     dispatch(getAllProducts());
   }, [dispatch]);
 
-  console.log(productList, uploadedImageUrl, "productList");
+  console.log("FormData : ", formData);
 
   return (
     <>
       <div className="mb-5 w-full flex justify-end">
         <Button onClick={() => setOpenProducts(true)}>Add Products</Button>
       </div>
-      <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4"></div>
+      <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
+        {productList && productList.length > 0
+          ? productList.map((currProduct) => {
+              return (
+                <AdminProductTile
+                  product={currProduct}
+                  setcurrEditingId={setcurrEditingId}
+                  setOpenProducts={setOpenProducts}
+                  setFormData={setFormData}
+                />
+              );
+            })
+          : null}
+      </div>
       <Sheet
         open={openProducts}
         onOpenChange={() => {
           setOpenProducts(false);
+          setcurrEditingId(null);
+          setFormData(initialFormData);
         }}
       >
         <SheetContent side="right" className="overflow-auto p-6">
           <SheetHeader>
             <SheetTitle>
               <span className="text-2xl cursor-pointer font-semibold">
-                Add new Product
+                {currEditingId !== null ? "Edit Product" : "Add new Product"}
               </span>
             </SheetTitle>
           </SheetHeader>
@@ -87,13 +105,14 @@ export const AdminProducts = () => {
             setUploadedImageUrl={setUploadedImageUrl}
             setImageLoaderState={setImageLoaderState}
             imageLoaderState={imageLoaderState}
+            isEditMode={currEditingId !== null}
           />
           <div className="py-6">
             <CommonForm
               onSubmit={onSubmit}
               formData={formData}
               setFormData={setFormData}
-              buttonText="Add"
+              buttonText={currEditingId !== null ? "Edit" : "Add"}
               formControls={addProductsFormElements}
             />
           </div>

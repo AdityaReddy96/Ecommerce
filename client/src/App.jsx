@@ -18,7 +18,7 @@ import { UnAuthPage } from "./pages/unauth-page";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { checkAuth } from "./store/auth-slice";
-import { Loader } from "lucide-react";
+import { SpinnerLoader } from "./assets/loader";
 
 export const App = () => {
   const { user, isAuthenticated, isLoading } = useSelector(
@@ -33,7 +33,7 @@ export const App = () => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen w-full">
-        <Loader size={40} />
+        <SpinnerLoader size={40} />
       </div>
     );
   }
