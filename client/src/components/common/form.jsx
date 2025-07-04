@@ -16,6 +16,7 @@ export const CommonForm = ({
   setFormData,
   onSubmit,
   buttonText,
+  isBtnDisabled,
 }) => {
   const types = {
     INPUT: "input",
@@ -127,7 +128,7 @@ export const CommonForm = ({
           );
         })}
       </div>
-      <Button type="submit" className="mt-2 w-full">
+      <Button disabled={isBtnDisabled} type="submit" className="mt-2 w-full">
         {buttonText || "Submit"}
       </Button>
     </form>

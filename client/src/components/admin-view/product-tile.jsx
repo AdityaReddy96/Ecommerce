@@ -6,15 +6,16 @@ export const AdminProductTile = ({
   setOpenProducts,
   product,
   setFormData,
+  handleDeleteProduct,
 }) => {
   return (
-    <Card className="w-full max-w-sm mx-auto">
+    <Card className="w-full max-w-sm mx-auto pt-0">
       <div>
         <div className="relative">
           <img
             src={product?.image}
             alt={product?.title}
-            className="w-full h-[300px] object-cover rounded-t-lg px-3"
+            className="w-full h-[300px] object-cover rounded-t-lg"
           />
         </div>
         <CardContent>
@@ -42,7 +43,9 @@ export const AdminProductTile = ({
           >
             Edit
           </Button>
-          <Button>Delete</Button>
+          <Button onClick={() => handleDeleteProduct(product?._id)}>
+            Delete
+          </Button>
         </CardFooter>
       </div>
     </Card>

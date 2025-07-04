@@ -9,7 +9,12 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { addProductsFormElements } from "@/config";
-import { addNewProduct, getAllProducts } from "@/store/admin/product-slice";
+import {
+  addNewProduct,
+  deleteProduct,
+  editProduct,
+  getAllProducts,
+} from "@/store/admin/product-slice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
@@ -40,28 +45,59 @@ export const AdminProducts = () => {
 
   const onSubmit = (event) => {
     event.preventDefault();
-    dispatch(
-      addNewProduct({
-        ...formData,
-        image: uploadedImageUrl,
-      })
-    ).then((data) => {
-      // console.log(data);
+    currEditingId !== null
+      ? dispatch(
+          editProduct({
+            id: currEditingId,
+            formData,
+          })
+        ).then((data) => {
+          // console.log("Edited data", data);
+          if (data?.payload?.success) {
+            dispatch(getAllProducts());
+            setOpenProducts(false);
+            setcurrEditingId(null);
+            setFormData(initialFormData);
+            toast.success("Product Edited");
+          }
+        })
+      : dispatch(
+          addNewProduct({
+            ...formData,
+            image: uploadedImageUrl,
+          })
+        ).then((data) => {
+          // console.log("Added data", data);
+          if (data?.payload?.success) {
+            dispatch(getAllProducts());
+            setImageFile(null);
+            setOpenProducts(false);
+            setFormData(initialFormData);
+            toast.success("Product Added");
+          }
+        });
+  };
+
+  const handleDeleteProduct = (deleteProductId) => {
+    // console.log(deleteProductId);
+    dispatch(deleteProduct(deleteProductId)).then((data) => {
       if (data?.payload?.success) {
-        dispatch(getAllProducts);
-        setImageFile(null);
-        setOpenProducts(false);
-        setFormData(initialFormData);
-        toast.success("Product Added");
+        dispatch(getAllProducts());
       }
     });
+  };
+
+  const isFormValid = () => {
+    return Object.keys(formData)
+      .map((key) => formData[key] !== "")
+      .every((item) => item);
   };
 
   useEffect(() => {
     dispatch(getAllProducts());
   }, [dispatch]);
 
-  console.log("FormData : ", formData);
+  // console.log("FormData : ", formData);
 
   return (
     <>
@@ -73,10 +109,12 @@ export const AdminProducts = () => {
           ? productList.map((currProduct) => {
               return (
                 <AdminProductTile
+                  key={currProduct._id}
                   product={currProduct}
                   setcurrEditingId={setcurrEditingId}
                   setOpenProducts={setOpenProducts}
                   setFormData={setFormData}
+                  handleDeleteProduct={handleDeleteProduct}
                 />
               );
             })
@@ -114,6 +152,7 @@ export const AdminProducts = () => {
               setFormData={setFormData}
               buttonText={currEditingId !== null ? "Edit" : "Add"}
               formControls={addProductsFormElements}
+              isBtnDisabled={!isFormValid()}
             />
           </div>
         </SheetContent>
