@@ -5,11 +5,8 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import authRegisterRouter from "./routes/auth/auth-routes.js";
 import authLoginRouter from "./routes/auth/auth-routes.js";
-import handleImageUploadRouter from "./routes/admin/products-routes.js";
-import addProductRouter from "./routes/admin/products-routes.js";
-import fetchProductRouter from "./routes/admin/products-routes.js";
-import editProductRouter from "./routes/admin/products-routes.js";
-import deleteProductRouter from "./routes/admin/products-routes.js";
+import adminProductsRouter from "./routes/admin/products-routes.js";
+import shopProductsRouter from "./routes/shop/products-routes.js";
 
 const app = express();
 
@@ -48,11 +45,8 @@ app.use(cookieParser());
 app.use(express.json());
 app.use("/api/auth", authRegisterRouter);
 app.use("/api/auth", authLoginRouter);
-app.use("/api/admin/products", handleImageUploadRouter);
-app.use("/api/admin/products", addProductRouter);
-app.use("/api/admin/products", fetchProductRouter);
-app.use("/api/admin/products", editProductRouter);
-app.use("/api/admin/products", deleteProductRouter);
+app.use("/api/admin/products", adminProductsRouter);
+app.use("/api/shop/products", shopProductsRouter);
 
 // server connection
 app.listen(PORT, () => {
