@@ -11,9 +11,13 @@ import { ArrowUpDownIcon } from "lucide-react";
 import { sortOptions } from "@/config";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { getFilteredProducts } from "@/store/shop/shop-products-silce";
+import {
+  getFilteredProducts,
+  getProductDetails,
+} from "@/store/shop/shop-products-silce";
 import { ShoppingProductTile } from "@/components/shopping-view/product-tile";
 import { useSearchParams } from "react-router-dom";
+import { ProductDetails } from "@/components/shopping-view/product-details";
 
 const createSearchParamsHelper = (filerParams) => {
   const queryParams = [];
@@ -30,10 +34,13 @@ const createSearchParamsHelper = (filerParams) => {
 export const ShoppingListing = () => {
   // Fetch productList
   const dispatch = useDispatch();
-  const { productList } = useSelector((state) => state.shopProducts);
+  const { productList, productDetails } = useSelector(
+    (state) => state.shopProducts
+  );
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [openDetails, setOpenDetails] = useState(false);
 
   const handleSort = (value) => {
     // console.log(value);
@@ -67,6 +74,11 @@ export const ShoppingListing = () => {
     // console.log(copyFilters);
   };
 
+  const handleGetProductDetails = (getCurrProductId) => {
+    // console.log(getCurrProductId);
+    dispatch(getProductDetails(getCurrProductId));
+  };
+
   useEffect(() => {
     setSort("price-lowtohigh");
     setFilters(JSON.parse(sessionStorage.getItem("filters")) || {});
@@ -86,7 +98,11 @@ export const ShoppingListing = () => {
       );
   }, [dispatch, sort, filters]);
 
-  // console.log("Filters", filters);
+  useEffect(() => {
+    if (productDetails !== null) setOpenDetails(true);
+  }, [productDetails]);
+
+  console.log("productDetails", productDetails);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">
@@ -128,6 +144,7 @@ export const ShoppingListing = () => {
           {productList && productList.length > 0
             ? productList.map((productItem) => (
                 <ShoppingProductTile
+                  handleGetProductDetails={handleGetProductDetails}
                   key={productItem._id}
                   product={productItem}
                 />
@@ -135,6 +152,11 @@ export const ShoppingListing = () => {
             : null}
         </div>
       </div>
+      <ProductDetails
+        openDetails={openDetails}
+        setOpenDetails={setOpenDetails}
+        productDetails={productDetails}
+      />
     </div>
   );
 };

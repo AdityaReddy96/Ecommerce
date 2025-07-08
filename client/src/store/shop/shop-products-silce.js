@@ -4,6 +4,7 @@ import axios from "axios";
 const initialState = {
   isLoading: false,
   productList: [],
+  productDetails: null,
 };
 
 export const getFilteredProducts = createAsyncThunk(
@@ -15,6 +16,16 @@ export const getFilteredProducts = createAsyncThunk(
     });
     const result = await axios.get(
       `http://localhost:8000/api/shop/products/get?${query}`
+    );
+    return result?.data;
+  }
+);
+
+export const getProductDetails = createAsyncThunk(
+  "/products/getProductDetails",
+  async (id) => {
+    const result = await axios.get(
+      `http://localhost:8000/api/shop/products/get/${id}`
     );
     return result?.data;
   }
@@ -36,6 +47,17 @@ const shopProductSlice = createSlice({
       .addCase(getFilteredProducts.rejected, (state, action) => {
         state.isLoading = false;
         state.productList = [];
+      })
+      .addCase(getProductDetails.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getProductDetails.fulfilled, (state, action) => {  
+        state.isLoading = false;
+        state.productDetails = action.payload.data;
+      })
+      .addCase(getProductDetails.rejected, (state, action) => {
+        state.isLoading = false;
+        state.productDetails = null;
       });
   },
 });
