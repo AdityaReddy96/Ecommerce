@@ -4,12 +4,34 @@ import { Button } from "../ui/button";
 import { Dialog, DialogContent } from "../ui/dialog";
 import { Separator } from "../ui/separator";
 import { Input } from "../ui/input";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCartSlice, getCartItemSlice } from "@/store/shop/shop-cart-slice";
+import { toast } from "sonner";
 
 export const ProductDetails = ({
   openDetails,
   setOpenDetails,
   productDetails,
 }) => {
+  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
+  const handleAddToCartInProductDetails = (getCurrProductId) => {
+    // console.log(getCurrProductId);
+    dispatch(
+      addToCartSlice({
+        userId: user?.id,
+        productId: getCurrProductId,
+        quantity: 1,
+      })
+    ).then((data) => {
+      if (data?.payload?.success) {
+        dispatch(getCartItemSlice(user?.id));
+        toast.success("Product Added to Cart");
+      }
+    });
+  };
+
   return (
     <Dialog open={openDetails} onOpenChange={setOpenDetails}>
       <DialogContent className="grid grid-cols-2 gap-8 sm:p-12 max-w-[90vw] sm:max-w-[80vw] lg:max-w-[65vw]">
@@ -54,7 +76,14 @@ export const ProductDetails = ({
             <span className="text-muted-foreground">(4.5)</span>
           </div>
           <div className="mt-5 mb-5">
-            <Button className="w-full">Add to Cart</Button>
+            <Button
+              onClick={() =>
+                handleAddToCartInProductDetails(productDetails?._id)
+              }
+              className="w-full"
+            >
+              Add to Cart
+            </Button>
           </div>
           <Separator />
           <div className="max-h-[300px] overflow-auto">
@@ -82,8 +111,8 @@ export const ProductDetails = ({
               </div>
             </div>
             <div className="mt-6 flex gap-2">
-                <Input placeholder="Write a review"/>
-                <Button>Add review</Button>
+              <Input placeholder="Write a review" />
+              <Button>Add review</Button>
             </div>
           </div>
         </div>

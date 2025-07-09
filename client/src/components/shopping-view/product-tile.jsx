@@ -3,7 +3,11 @@ import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { brandOptionsMap, categoryOptionsMap } from "@/config";
 
-export const ShoppingProductTile = ({ product, handleGetProductDetails }) => {
+export const ShoppingProductTile = ({
+  product,
+  handleGetProductDetails,
+  handleAddToCart,
+}) => {
   return (
     <Card className="w-full max-w-sm mx-auto pt-0">
       <div onClick={() => handleGetProductDetails(product?._id)}>
@@ -44,10 +48,17 @@ export const ShoppingProductTile = ({ product, handleGetProductDetails }) => {
             ) : null}
           </div>
         </CardContent>
-        <CardFooter className="flex justify-between items-center">
-          <Button className="w-full">Add to Cart</Button>
-        </CardFooter>
       </div>
+      <CardFooter className="flex justify-between items-center">
+        <Button
+          onClick={() => {
+            handleAddToCart(product?._id);
+          }}
+          className="w-full"
+        >
+          Add to Cart
+        </Button>
+      </CardFooter>
     </Card>
   );
 };

@@ -18,6 +18,8 @@ import {
 import { ShoppingProductTile } from "@/components/shopping-view/product-tile";
 import { useSearchParams } from "react-router-dom";
 import { ProductDetails } from "@/components/shopping-view/product-details";
+import { addToCartSlice, getCartItemSlice } from "@/store/shop/shop-cart-slice";
+import { toast } from "sonner";
 
 const createSearchParamsHelper = (filerParams) => {
   const queryParams = [];
@@ -37,6 +39,7 @@ export const ShoppingListing = () => {
   const { productList, productDetails } = useSelector(
     (state) => state.shopProducts
   );
+  const { user } = useSelector((state) => state.auth);
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -79,6 +82,22 @@ export const ShoppingListing = () => {
     dispatch(getProductDetails(getCurrProductId));
   };
 
+  const handleAddToCart = (getCurrProductId) => {
+    // console.log(getCurrProductId);
+    dispatch(
+      addToCartSlice({
+        userId: user?.id,
+        productId: getCurrProductId,
+        quantity: 1,
+      })
+    ).then((data) => {
+      if (data?.payload?.success) {
+        dispatch(getCartItemSlice(user?.id));
+        toast.success("Product Added to Cart");
+      }
+    });
+  };
+
   useEffect(() => {
     setSort("price-lowtohigh");
     setFilters(JSON.parse(sessionStorage.getItem("filters")) || {});
@@ -102,7 +121,7 @@ export const ShoppingListing = () => {
     if (productDetails !== null) setOpenDetails(true);
   }, [productDetails]);
 
-  console.log("productDetails", productDetails);
+  // console.log("cartItems", cartItems);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">
@@ -147,6 +166,7 @@ export const ShoppingListing = () => {
                   handleGetProductDetails={handleGetProductDetails}
                   key={productItem._id}
                   product={productItem}
+                  handleAddToCart={handleAddToCart}
                 />
               ))
             : null}
