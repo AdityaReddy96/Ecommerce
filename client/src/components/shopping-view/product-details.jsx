@@ -7,6 +7,7 @@ import { Input } from "../ui/input";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCartSlice, getCartItemSlice } from "@/store/shop/shop-cart-slice";
 import { toast } from "sonner";
+import { setProductDetails } from "@/store/shop/shop-products-silce";
 
 export const ProductDetails = ({
   openDetails,
@@ -32,8 +33,13 @@ export const ProductDetails = ({
     });
   };
 
+  const handleDetailsDialogClose = () => {
+    setOpenDetails(false);
+    dispatch(setProductDetails());
+  };
+
   return (
-    <Dialog open={openDetails} onOpenChange={setOpenDetails}>
+    <Dialog open={openDetails} onOpenChange={handleDetailsDialogClose}>
       <DialogContent className="grid grid-cols-2 gap-8 sm:p-12 max-w-[90vw] sm:max-w-[80vw] lg:max-w-[65vw]">
         <div className="relative overflow-hidden rounded-lg">
           <img

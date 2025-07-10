@@ -100,8 +100,13 @@ export const ShoppingListing = () => {
 
   useEffect(() => {
     setSort("price-lowtohigh");
-    setFilters(JSON.parse(sessionStorage.getItem("filters")) || {});
   }, []);
+
+  useEffect(() => {
+    const filtersFromStorage =
+      JSON.parse(sessionStorage.getItem("filters")) || {};
+    setFilters(filtersFromStorage);
+  }, [searchParams]);
 
   useEffect(() => {
     if (filters && Object.keys(filters).length > 0) {

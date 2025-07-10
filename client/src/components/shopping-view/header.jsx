@@ -23,18 +23,34 @@ import { logoutUser } from "@/store/auth-slice";
 import { CartWrapper } from "./cart-wrapper";
 import { useEffect, useState } from "react";
 import { getCartItemSlice } from "@/store/shop/shop-cart-slice";
+import { Label } from "../ui/label";
 
 const MenuItems = () => {
+  const navigate = useNavigate();
+
+  const handleMenuNavigation = (menuItem) => {
+    sessionStorage.removeItem("filters");
+
+    const menuFilter =
+      menuItem.id !== "home"
+        ? {
+            category: [menuItem.id],
+          }
+        : null;
+
+    sessionStorage.setItem("filters", JSON.stringify(menuFilter));
+    navigate(menuItem.path);
+  };
   return (
     <nav className="flex flex-col mb-3 lg:mb-0 lg:items-center gap-6 lg:flex-row">
       {shoppingViewHeaderMenuItems.map((menuItem) => (
-        <Link
+        <Label
+          onClick={() => handleMenuNavigation(menuItem)}
           key={menuItem.id}
-          to={menuItem.path}
-          className="text-sm font-medium"
+          className="text-sm font-medium cursor-pointer"
         >
           {menuItem.label}
-        </Link>
+        </Label>
       ))}
     </nav>
   );
@@ -76,9 +92,9 @@ const HeaderRightContent = () => {
         <CartWrapper
           cartItems={
             cartItems && cartItems.items && cartItems.items.length > 0
-              ? cartItems.items   
+              ? cartItems.items
               : []
-          } 
+          }
         />
       </Sheet>
       <DropdownMenu>
