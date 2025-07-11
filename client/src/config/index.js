@@ -148,7 +148,7 @@ export const brandOptionsMap = {
   puma: "Puma",
   wrogn: "Wrogn",
   hrx: "HRX",
-  levis: "Levis",
+  levis: "Levis"
 };
 
 export const filterOptions = {
@@ -174,41 +174,4 @@ export const sortOptions = [
   { id: "price-hightolow", label: "Price: High to Low" },
   { id: "title-atoz", label: "Title: A to Z" },
   { id: "title-ztoa", label: "Title: Z to A" },
-];
-
-export const addressFormControls = [
-  {
-    label: "Address",
-    name: "address",
-    componentType: "input",
-    type: "text",
-    placeholder: "Enter Your Address",
-  },
-  {
-    label: "City",
-    name: "city",
-    componentType: "input",
-    type: "text",
-    placeholder: "Enter Your City",
-  },
-  {
-    label: "Pincode",
-    name: "pincode",
-    componentType: "input",
-    type: "text",
-    placeholder: "Enter Your Pincode",
-  },
-  {
-    label: "Phone",
-    name: "phone",
-    componentType: "input",
-    type: "text",
-    placeholder: "Enter Your Phone Number",
-  },
-  {
-    label: "Notes",
-    name: "notes",
-    componentType: "textarea",
-    placeholder: "Enter Landmark(Optional)",
-  },
 ];

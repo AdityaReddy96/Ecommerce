@@ -1,19 +1,16 @@
-import { useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
 import { CartItemContent } from "./cart-items-content";
 
 export const CartWrapper = ({ cartItems }) => {
-  const navigate = useNavigate();
-
   const totalAmount =
     cartItems && cartItems.length > 0
       ? cartItems.reduce((sum, currItem) => {
-          return (
-            sum +
-            (currItem?.salePrice > 0 ? currItem?.salePrice : currItem?.price) *
-              currItem?.quantity
-          );
+          return  sum +
+            (currItem?.salePrice > 0
+              ? currItem?.salePrice
+              : currItem?.price) *
+              currItem?.quantity;
         }, 0)
       : 0;
   return (
@@ -36,9 +33,7 @@ export const CartWrapper = ({ cartItems }) => {
           <span className="font-bold">${totalAmount}</span>
         </div>
       </div>
-      <Button onClick={() => navigate("/shop/checkout")} className="w-full">
-        Checkout
-      </Button>
+      <Button className="w-full">Checkout</Button>
     </SheetContent>
   );
 };
