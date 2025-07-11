@@ -8,7 +8,7 @@ import authLoginRouter from "./routes/auth/auth-routes.js";
 import adminProductsRouter from "./routes/admin/products-routes.js";
 import shopProductsRouter from "./routes/shop/products-routes.js";
 import ShopCartRouter from "./routes/shop/cart-routes.js";
-import AddressRouter from "./routes/shop/address-routes.js";
+
 
 const app = express();
 
@@ -50,7 +50,6 @@ app.use("/api/auth", authLoginRouter);
 app.use("/api/admin/products", adminProductsRouter);
 app.use("/api/shop/products", shopProductsRouter);
 app.use("/api/shop/cart", ShopCartRouter);
-app.use("/api/shop/address", AddressRouter);
 
 // server connection
 app.listen(PORT, () => {
