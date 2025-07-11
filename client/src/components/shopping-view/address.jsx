@@ -53,7 +53,7 @@ export const Address = () => {
         })
       : dispatch(addAddressSlice({ ...formData, userId: user?.id })).then(
           (data) => {
-            console.log(data);
+            // console.log(data);
             if (data?.payload?.success) {
               dispatch(getAddressSlice(user?.id));
               setFormData(initialFormData);
@@ -98,7 +98,7 @@ export const Address = () => {
     dispatch(getAddressSlice(user?.id));
   }, [dispatch]);
 
-//   console.log(addressList);
+  // console.log(addressList);
 
   return (
     <Card>
