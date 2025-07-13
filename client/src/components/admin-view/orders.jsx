@@ -8,8 +8,12 @@ import {
   TableRow,
 } from "../ui/table";
 import { Button } from "../ui/button";
+import { Dialog } from "../ui/dialog";
+import { useState } from "react";
+import { AdminOrdersDetailView } from "./order-details";
 
 export const AdminOrdersView = () => {
+  const [openOrderDetails, setOpenOrderDetails] = useState(false);
   return (
     <Card>
       <CardHeader>
@@ -35,7 +39,15 @@ export const AdminOrdersView = () => {
               <TableCell>Arriving Today</TableCell>
               <TableCell>$1000</TableCell>
               <TableCell>
-                <Button>View Details</Button>
+                <Dialog
+                  open={openOrderDetails}
+                  onOpenChange={setOpenOrderDetails}
+                >
+                  <Button onClick={() => setOpenOrderDetails(true)}>
+                    View Details
+                  </Button>
+                  <AdminOrdersDetailView />
+                </Dialog>
               </TableCell>
             </TableRow>
           </TableBody>

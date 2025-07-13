@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Dialog } from "../ui/dialog";
 import {
   Table,
   TableBody,
@@ -8,8 +10,10 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
+import { ShoppingOrderDetailsView } from "./order-details";
 
 export const ShoppingOrders = () => {
+  const [openShoppingDetails, setOpenShoppingDetails] = useState(false);
   return (
     <Card>
       <CardHeader>
@@ -35,7 +39,15 @@ export const ShoppingOrders = () => {
               <TableCell>Arriving Today</TableCell>
               <TableCell>$1000</TableCell>
               <TableCell>
-                <Button>View Details</Button>
+                <Dialog
+                  open={openShoppingDetails}
+                  onOpenChange={setOpenShoppingDetails}
+                >
+                  <Button onClick={() => setOpenShoppingDetails(true)}>
+                    View Details
+                  </Button>
+                <ShoppingOrderDetailsView />
+                </Dialog>
               </TableCell>
             </TableRow>
           </TableBody>
