@@ -20,7 +20,7 @@ const initialFormData = {
   notes: "",
 };
 
-export const Address = () => {
+export const Address = ({ setCurrentSelectedAddress }) => {
   const [formData, setFormData] = useState(initialFormData);
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
@@ -111,6 +111,7 @@ export const Address = () => {
                   key={address._id}
                   handleDeleteAddress={handleDeleteAddress}
                   handleEditAddress={handleEditAddress}
+                  setCurrentSelectedAddress={setCurrentSelectedAddress}
                 />
               );
             })

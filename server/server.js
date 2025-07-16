@@ -9,6 +9,7 @@ import adminProductsRouter from "./routes/admin/products-routes.js";
 import shopProductsRouter from "./routes/shop/products-routes.js";
 import ShopCartRouter from "./routes/shop/cart-routes.js";
 import addressRouter from "./routes/shop/address-routes.js";
+import shopOrderRouter from "./routes/shop/order-routes.js";
 
 const app = express();
 
@@ -51,6 +52,7 @@ app.use("/api/admin/products", adminProductsRouter);
 app.use("/api/shop/products", shopProductsRouter);
 app.use("/api/shop/cart", ShopCartRouter);
 app.use("/api/shop/address", addressRouter);
+app.use("/api/shop/order", shopOrderRouter);
 
 // server connection
 app.listen(PORT, () => {
