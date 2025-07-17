@@ -38,7 +38,9 @@ export const ShoppingOrders = () => {
       setOpenShoppingDetails(true);
     }
   }, [orderDetails]);
+
   // console.log(orderList);
+  // console.log(orderDetails);
 
   return (
     <Card>
@@ -76,13 +78,13 @@ export const ShoppingOrders = () => {
                           {order?.orderStatus}
                         </Badge>
                       </TableCell>
-                      <TableCell>{order?.totalAmount}</TableCell>
+                      <TableCell>${order?.totalAmount}</TableCell>
                       <TableCell>
                         <Dialog
                           open={openShoppingDetails}
                           onOpenChange={() => [
                             setOpenShoppingDetails(false),
-                            dispatch(resetOrderDetails())
+                            dispatch(resetOrderDetails()),
                           ]}
                         >
                           <Button
@@ -90,7 +92,9 @@ export const ShoppingOrders = () => {
                           >
                             View Details
                           </Button>
-                          <ShoppingOrderDetailsView />
+                          <ShoppingOrderDetailsView
+                            orderDetails={orderDetails}
+                          />
                         </Dialog>
                       </TableCell>
                     </TableRow>

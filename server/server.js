@@ -6,10 +6,12 @@ import cors from "cors";
 import authRegisterRouter from "./routes/auth/auth-routes.js";
 import authLoginRouter from "./routes/auth/auth-routes.js";
 import adminProductsRouter from "./routes/admin/products-routes.js";
+import adminOrderRouter from "./routes/admin/order-routes.js";
 import shopProductsRouter from "./routes/shop/products-routes.js";
 import ShopCartRouter from "./routes/shop/cart-routes.js";
 import addressRouter from "./routes/shop/address-routes.js";
 import shopOrderRouter from "./routes/shop/order-routes.js";
+
 
 const app = express();
 
@@ -48,11 +50,16 @@ app.use(cookieParser());
 app.use(express.json());
 app.use("/api/auth", authRegisterRouter);
 app.use("/api/auth", authLoginRouter);
+
 app.use("/api/admin/products", adminProductsRouter);
+app.use("/api/admin/orders", adminOrderRouter);
+
 app.use("/api/shop/products", shopProductsRouter);
 app.use("/api/shop/cart", ShopCartRouter);
 app.use("/api/shop/address", addressRouter);
 app.use("/api/shop/order", shopOrderRouter);
+
+
 
 // server connection
 app.listen(PORT, () => {

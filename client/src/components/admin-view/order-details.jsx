@@ -3,47 +3,80 @@ import { CommonForm } from "../common/form";
 import { DialogContent } from "../ui/dialog";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
+import { Badge } from "../ui/badge";
+import { useSelector } from "react-redux";
 
 const initialFormData = {
   status: "",
 };
 
-export const AdminOrdersDetailView = () => {
+export const AdminOrdersDetailView = ({ orderDetails }) => {
   const [formData, setFormData] = useState(initialFormData);
+  const { user } = useSelector((state) => state.auth);
 
   const handleStatusUpdate = (event) => {
     event.preventDefault();
-    
-  }
+  };
   return (
-    <DialogContent className="sm:max-w-[600px]">
-      <div className="grid gap-6">
+    <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+      <div className="grid gap-6 py-4">
         <div className="grid gap-2">
           <div className="flex items-center justify-between">
             <p className="font-medium">Order ID</p>
-            <Label>123456</Label>
+            <Label>{orderDetails?._id}</Label>
           </div>
           <div className="flex items-center justify-between">
             <p className="font-medium">Order Date</p>
-            <Label>01/12/23</Label>
+            <Label>{orderDetails?.orderDate.split("T")[0]}</Label>
           </div>
           <div className="flex items-center justify-between">
             <p className="font-medium">Order Status</p>
-            <Label>Arriving Today</Label>
+            <Label>
+              <Badge
+                className={`py-1 px-3 ${
+                  orderDetails?.orderStatus === "Confirmed"
+                    ? "bg-blue-500"
+                    : null
+                }`}
+              >
+                {orderDetails?.orderStatus}
+              </Badge>
+            </Label>
           </div>
           <div className="flex items-center justify-between">
             <p className="font-medium">Order Price</p>
-            <Label>$100</Label>
+            <Label>${orderDetails?.totalAmount}</Label>
+          </div>
+          <div className="flex items-center justify-between">
+            <p className="font-medium">Payment Status</p>
+            <Label>{orderDetails?.paymentStatus}</Label>
+          </div>
+          <div className="flex items-center justify-between">
+            <p className="font-medium">Payment Method</p>
+            <Label>{orderDetails?.paymentMethod}</Label>
           </div>
           <Separator />
           <div className="grid gap-4 mt-5">
             <div className="grid gap-2">
               <div className="font-medium">Order Details</div>
               <ul className="grid gap-3">
-                <li className="flex items-center justify-between">
-                  <span>Product One</span>
-                  <span>$100</span>
-                </li>
+                {orderDetails?.cartItems && orderDetails?.cartItems.length > 0
+                  ? orderDetails?.cartItems.map((cartItem) => {
+                      return (
+                        <li className="grid grid-cols-3 gap-4 items-center">
+                          <span className="truncate">
+                            Title: {cartItem?.title}
+                          </span>
+                          <span className="text-center">
+                            Quantity: {cartItem?.quantity}
+                          </span>
+                          <span className="text-right">
+                            Price: ${cartItem?.price}
+                          </span>
+                        </li>
+                      );
+                    })
+                  : null}
               </ul>
             </div>
           </div>
@@ -52,12 +85,12 @@ export const AdminOrdersDetailView = () => {
             <div className="grid gap-2">
               <div className="font-medium">Shipping Details</div>
               <div className="grid gap-0.5 text-muted-foreground">
-                <span>Username: John</span>
-                <span>Address: 6th Main Street</span>
-                <span>City: Bengaluru</span>
-                <span>Pincode: 235689</span>
-                <span>Phone: 7894562396</span>
-                <span>Landmark: Near Lighthouse</span>
+                <span>Username: {user?.userName}</span>
+                <span>Address: {orderDetails?.addressInfo?.address}</span>
+                <span>City: {orderDetails?.addressInfo?.city}</span>
+                <span>Pincode: {orderDetails?.addressInfo?.pincode}</span>
+                <span>Phone: {orderDetails?.addressInfo?.phone}</span>
+                <span>Landmark: {orderDetails?.addressInfo?.notes}</span>
               </div>
             </div>
             <Separator />
