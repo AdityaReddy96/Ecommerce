@@ -111,7 +111,7 @@ export const capturePayment = async (req, res) => {
       (order.payerId = payerId);
 
     const getCartId = order.cartId;
-    await findByIdAndDelete(getCartId);
+    await Cart.findByIdAndDelete(getCartId);
 
     await order.save();
 
@@ -125,6 +125,60 @@ export const capturePayment = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Error occured in createOrder",
+    });
+  }
+};
+
+export const getOrdersByUSerId = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const orders = await Order.find({ userId });
+
+    if (!orders.length) {
+      res.status(404).json({
+        success: false,
+        message: "No Orders Found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Order Fetched Successfully",
+      data: orders,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Error occured in getOrderDetails",
+    });
+  }
+};
+
+export const getOrderDetails = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const order = await Order.findById(id);
+
+    if (!order) {
+      res.status(404).json({
+        success: false,
+        message: "Order Not Found In getOrderDetails",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Order Details Fetched Successfully",
+      data: order,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Error occured in getOrderDetails",
     });
   }
 };
