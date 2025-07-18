@@ -25,6 +25,8 @@ export const ShoppingOrderDetailsView = ({ orderDetails }) => {
                 className={`py-1 px-3 ${
                   orderDetails?.orderStatus === "Confirmed"
                     ? "bg-blue-500"
+                    : orderDetails?.orderStatus === "Rejected"
+                    ? "bg-red-500"
                     : null
                 }`}
               >

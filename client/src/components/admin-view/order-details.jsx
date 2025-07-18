@@ -4,7 +4,12 @@ import { DialogContent } from "../ui/dialog";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
 import { Badge } from "../ui/badge";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getAllOrdersOfAllUsers,
+  getOrderDetailsAdmin,
+  updateOrderStatus,
+} from "@/store/admin/order-slice";
 
 const initialFormData = {
   status: "",
@@ -13,9 +18,22 @@ const initialFormData = {
 export const AdminOrdersDetailView = ({ orderDetails }) => {
   const [formData, setFormData] = useState(initialFormData);
   const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
   const handleStatusUpdate = (event) => {
     event.preventDefault();
+    // console.log(formData);
+    const { status } = formData;
+
+    dispatch(
+      updateOrderStatus({ id: orderDetails?._id, orderStatus: status })
+    ).then((data) => {
+      if (data?.payload?.success) {
+        dispatch(getOrderDetailsAdmin(orderDetails?._id));
+        dispatch(getAllOrdersOfAllUsers());
+        setFormData(initialFormData);
+      }
+    });
   };
   return (
     <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
@@ -36,6 +54,8 @@ export const AdminOrdersDetailView = ({ orderDetails }) => {
                 className={`py-1 px-3 ${
                   orderDetails?.orderStatus === "Confirmed"
                     ? "bg-blue-500"
+                    : orderDetails?.orderStatus === "Rejected"
+                    ? "bg-red-500"
                     : null
                 }`}
               >
@@ -63,7 +83,10 @@ export const AdminOrdersDetailView = ({ orderDetails }) => {
                 {orderDetails?.cartItems && orderDetails?.cartItems.length > 0
                   ? orderDetails?.cartItems.map((cartItem) => {
                       return (
-                        <li className="grid grid-cols-3 gap-4 items-center">
+                        <li
+                          key={cartItem?._id}
+                          className="grid grid-cols-3 gap-4 items-center"
+                        >
                           <span className="truncate">
                             Title: {cartItem?.title}
                           </span>
@@ -102,11 +125,12 @@ export const AdminOrdersDetailView = ({ orderDetails }) => {
                     name: "status",
                     componentType: "select",
                     options: [
-                      { id: "pending", label: "Pending" },
-                      { id: "inProcess", label: "In Process" },
-                      { id: "shipped", label: "Shipping" },
-                      { id: "delivered", label: "Delivered" },
-                      { id: "rejected", label: "Rejected" },
+                      { id: "Confirmed", label: "Confirmed" },
+                      { id: "Pending", label: "Pending" },
+                      { id: "In Process", label: "In Process" },
+                      { id: "Shipped", label: "Shipped" },
+                      { id: "Delivered", label: "Delivered" },
+                      { id: "Rejected", label: "Rejected" },
                     ],
                   },
                 ]}

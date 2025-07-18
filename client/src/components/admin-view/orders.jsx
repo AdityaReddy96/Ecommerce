@@ -70,6 +70,8 @@ export const AdminOrdersView = () => {
                           className={`py-1 px-3 ${
                             order?.orderStatus === "Confirmed"
                               ? "bg-blue-500"
+                              : order?.orderStatus === "Rejected"
+                              ? "bg-red-500"
                               : null
                           }`}
                         >
