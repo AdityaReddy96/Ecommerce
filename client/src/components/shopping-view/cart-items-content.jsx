@@ -9,9 +9,35 @@ import { toast } from "sonner";
 
 export const CartItemContent = ({ cartItem }) => {
   const { user } = useSelector((state) => state.auth);
+  const { cartItems } = useSelector((state) => state.shoppingCart);
+  const { productList } = useSelector((state) => state.shopProducts);
+
   const dispatch = useDispatch();
 
   const handleUpdateQuantity = (cartItem, typeOfAction) => {
+    if (typeOfAction === "plus") {
+      let getCartItem = cartItems.items || [];
+
+      if (getCartItem.length) {
+        const currentCartItemIndex = getCartItem.findIndex(
+          (item) => item.productId === cartItem?.productId
+        );
+
+        const getCurrentProductIndex = productList.findIndex(
+          (product) => product._id === cartItem?.productId
+        );
+
+        const getTotalStock = productList[getCurrentProductIndex].totalStock;
+
+        if (currentCartItemIndex > -1) {
+          const getQuantity = getCartItem[currentCartItemIndex].quantity;
+          if (getQuantity + 1 > getTotalStock) {
+            toast.warning("Max Product Limit Reached");
+            return;
+          }
+        }
+      }
+    }
     dispatch(
       updateCartItemSlice({
         userId: user?.id,

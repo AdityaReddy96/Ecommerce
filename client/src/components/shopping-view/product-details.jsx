@@ -15,10 +15,27 @@ export const ProductDetails = ({
   productDetails,
 }) => {
   const { user } = useSelector((state) => state.auth);
+  const { cartItems } = useSelector((state) => state.shoppingCart);
   const dispatch = useDispatch();
 
-  const handleAddToCartInProductDetails = (getCurrProductId) => {
+  const handleAddToCartInProductDetails = (getCurrProductId, getTotalStock) => {
     // console.log(getCurrProductId);
+
+    let getCartItem = cartItems.items || [];
+
+    if (getCartItem.length) {
+      const currentItemIndex = getCartItem.findIndex(
+        (item) => item.productId === getCurrProductId
+      );
+
+      if (currentItemIndex > -1) {
+        const getQuantity = getCartItem[currentItemIndex].quantity;
+        if (getQuantity + 1 > getTotalStock) {
+          toast.warning("Max Product Limit Reached");
+          return;
+        }
+      }
+    }
     dispatch(
       addToCartSlice({
         userId: user?.id,
@@ -84,11 +101,22 @@ export const ProductDetails = ({
           <div className="mt-5 mb-5">
             <Button
               onClick={() =>
-                handleAddToCartInProductDetails(productDetails?._id)
+                handleAddToCartInProductDetails(
+                  productDetails?._id,
+                  productDetails?.totalStock
+                )
               }
-              className="w-full"
+              className={`${
+                productDetails?.totalStock === 0
+                  ? "opacity-60 w-full cursor-not-allowed"
+                  : "w-full"
+              }`}
             >
-              Add to Cart
+              {`${
+                productDetails?.totalStock === 0
+                  ? "Out of Stock"
+                  : "Add to Cart"
+              }`}
             </Button>
           </div>
           <Separator />

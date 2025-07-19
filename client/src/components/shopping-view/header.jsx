@@ -5,7 +5,7 @@ import {
   ShoppingCart,
   User,
 } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,14 +32,19 @@ const MenuItems = () => {
     sessionStorage.removeItem("filters");
 
     const menuFilter =
-      menuItem.id !== "home"
+      menuItem.id !== "home" && menuItem.id !== "products"
         ? {
             category: [menuItem.id],
           }
-        : null;
+        : {};
 
     sessionStorage.setItem("filters", JSON.stringify(menuFilter));
-    navigate(menuItem.path);
+    const queryParam =
+      menuItem.id !== "home" && menuItem.id !== "products"
+        ? `?category=${menuItem.id}`
+        : ""; // optional: add ?all=true or something like that
+
+    navigate(`${menuItem.path}${queryParam}`);
   };
   return (
     <nav className="flex flex-col mb-3 lg:mb-0 lg:items-center gap-6 lg:flex-row">

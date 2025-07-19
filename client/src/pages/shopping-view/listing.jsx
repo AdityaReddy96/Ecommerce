@@ -40,6 +40,8 @@ export const ShoppingListing = () => {
     (state) => state.shopProducts
   );
   const { user } = useSelector((state) => state.auth);
+  const { cartItems } = useSelector((state) => state.shoppingCart);
+
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -82,8 +84,23 @@ export const ShoppingListing = () => {
     dispatch(getProductDetails(getCurrProductId));
   };
 
-  const handleAddToCart = (getCurrProductId) => {
+  const handleAddToCart = (getCurrProductId, getTotalStock) => {
     // console.log(getCurrProductId);
+    let getCartItem = cartItems.items || [];
+
+    if (getCartItem.length) {
+      const currentItemIndex = getCartItem.findIndex(
+        (item) => item.productId === getCurrProductId
+      );
+
+      if (currentItemIndex > -1) {
+        const getQuantity = getCartItem[currentItemIndex].quantity;
+        if (getQuantity + 1 > getTotalStock) {
+          toast.warning("Max Product Limit Reached");
+          return;
+        }
+      }
+    }
     dispatch(
       addToCartSlice({
         userId: user?.id,
