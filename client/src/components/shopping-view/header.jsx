@@ -32,7 +32,9 @@ const MenuItems = () => {
     sessionStorage.removeItem("filters");
 
     const menuFilter =
-      menuItem.id !== "home" && menuItem.id !== "products"
+      menuItem.id !== "home" &&
+      menuItem.id !== "products" &&
+      menuItem.id !== "search"
         ? {
             category: [menuItem.id],
           }
@@ -40,7 +42,9 @@ const MenuItems = () => {
 
     sessionStorage.setItem("filters", JSON.stringify(menuFilter));
     const queryParam =
-      menuItem.id !== "home" && menuItem.id !== "products"
+      menuItem.id !== "home" &&
+      menuItem.id !== "products" &&
+      menuItem.id !== "search"
         ? `?category=${menuItem.id}`
         : ""; // optional: add ?all=true or something like that
 

@@ -19,8 +19,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { checkAuth } from "./store/auth-slice";
 import { SpinnerLoader } from "./assets/loader";
-import { PaypalReturn } from "./store/shop/paypal-return";
+import { PaypalReturn } from "./pages/shopping-view/paypal-return";
 import { PaymentSuccess } from "./pages/shopping-view/payment-success";
+import { SearchProducts } from "./pages/shopping-view/search";
 
 export const App = () => {
   const { user, isAuthenticated, isLoading } = useSelector(
@@ -81,6 +82,7 @@ export const App = () => {
           <Route path="listing" element={<ShoppingListing />}></Route>
           <Route path="paypal-return" element={<PaypalReturn />}></Route>
           <Route path="payment-success" element={<PaymentSuccess />}></Route>
+          <Route path="search" element={<SearchProducts />}></Route>
         </Route>
         <Route path="/unauth-page" element={<UnAuthPage />}></Route>
         <Route path="*" element={<NotFound />}></Route>
