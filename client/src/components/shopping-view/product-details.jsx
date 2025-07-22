@@ -8,6 +8,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCartSlice, getCartItemSlice } from "@/store/shop/shop-cart-slice";
 import { toast } from "sonner";
 import { setProductDetails } from "@/store/shop/shop-products-silce";
+import { Label } from "../ui/label";
+import { Rating } from "../common/star-rating";
+import { useEffect, useState } from "react";
+import { addReviewsSlice, getReviewsSlice } from "@/store/shop/review-slice";
 
 export const ProductDetails = ({
   openDetails,
@@ -16,7 +20,31 @@ export const ProductDetails = ({
 }) => {
   const { user } = useSelector((state) => state.auth);
   const { cartItems } = useSelector((state) => state.shoppingCart);
+  const { reviews } = useSelector((state) => state.shopReview);
   const dispatch = useDispatch();
+  const [reviewMsg, setReviewMsg] = useState("");
+  const [rating, setRating] = useState(0);
+
+  const handleRatingChange = (rating) => {
+    setRating(rating);
+  };
+
+  const handleAddReview = () => {
+    dispatch(
+      addReviewsSlice({
+        productId: productDetails?._id,
+        userId: user?.id,
+        userName: user?.userName,
+        reviewMessage: reviewMsg,
+        reviewValue: rating,
+      })
+    ).then((data) => {
+      if (data?.payload?.success) {
+        dispatch(getReviewsSlice(productDetails?._id));
+        toast.success("Review Added Successfully");
+      }
+    });
+  };
 
   const handleAddToCartInProductDetails = (getCurrProductId, getTotalStock) => {
     // console.log(getCurrProductId);
@@ -45,6 +73,8 @@ export const ProductDetails = ({
     ).then((data) => {
       if (data?.payload?.success) {
         dispatch(getCartItemSlice(user?.id));
+        setRating(0);
+        setReviewMsg("");
         toast.success("Product Added to Cart");
       }
     });
@@ -53,7 +83,21 @@ export const ProductDetails = ({
   const handleDetailsDialogClose = () => {
     setOpenDetails(false);
     dispatch(setProductDetails());
+    setRating(0);
+    setReviewMsg("");
   };
+
+  const averageReview =
+    reviews && reviews.length > 0
+      ? reviews.reduce((sum, reviewItem) => sum + reviewItem.reviewValue, 0) /
+        reviews.length
+      : 0;
+
+  useEffect(() => {
+    if (productDetails !== null) {
+      dispatch(getReviewsSlice(productDetails?._id));
+    }
+  }, [productDetails]);
 
   return (
     <Dialog open={openDetails} onOpenChange={handleDetailsDialogClose}>
@@ -91,12 +135,10 @@ export const ProductDetails = ({
             ) : null}
           </div>
           <div className="flex items-center gap-2 mt-2">
-            <StarIcon className="w-5 h-5 fill-primary" />
-            <StarIcon className="w-5 h-5 fill-primary" />
-            <StarIcon className="w-5 h-5 fill-primary" />
-            <StarIcon className="w-5 h-5 fill-primary" />
-            <StarIcon className="w-5 h-5 fill-primary" />
-            <span className="text-muted-foreground">(4.5)</span>
+            <Rating rating={averageReview} />
+            <span className="text-xl text-muted-foreground">{`(${Math.round(
+              averageReview
+            )})`}</span>
           </div>
           <div className="mt-5 mb-5">
             <Button
@@ -123,30 +165,51 @@ export const ProductDetails = ({
           <div className="max-h-[300px] overflow-auto">
             <h2 className="text-xl font-bold mb-4">Reviews</h2>
             <div className="grid gap-6">
-              <div className="flex gap-4">
-                <Avatar className="w-10 h-10 border">
-                  <AvatarFallback>AR</AvatarFallback>
-                </Avatar>
-                <div className="grid gap-1">
-                  <div className="flex items-center gap-2">
-                    <h3 className="font-bold">Aditya</h3>
+              {reviews && reviews.length > 0 ? (
+                reviews.map((review) => (
+                  <div key={review?._id} className="flex gap-4">
+                    <Avatar className="w-10 h-10 border">
+                      <AvatarFallback className="bg-gray-300">
+                        {review?.userName[0].toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="grid gap-1">
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-bold">{review?.userName}</h3>
+                      </div>
+                      <div className="flex items-center gap-0.5">
+                        <Rating rating={review?.reviewValue} />
+                      </div>
+                      <p className="text-muted-foreground">
+                        {review?.reviewMessage}
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-0.5">
-                    <StarIcon className="w-5 h-5 fill-primary" />
-                    <StarIcon className="w-5 h-5 fill-primary" />
-                    <StarIcon className="w-5 h-5 fill-primary" />
-                    <StarIcon className="w-5 h-5 fill-primary" />
-                    <StarIcon className="w-5 h-5 fill-primary" />
-                  </div>
-                  <p className="text-muted-foreground">
-                    This is an awesome product
-                  </p>
-                </div>
-              </div>
+                ))
+              ) : (
+                <h1>No reviews</h1>
+              )}
             </div>
-            <div className="mt-6 flex gap-2">
-              <Input placeholder="Write a review" />
-              <Button>Add review</Button>
+            <div className="mt-4 flex-col flex gap-2">
+              <Label>Write a review</Label>
+              <div className="flex">
+                <Rating
+                  rating={rating}
+                  handleRatingChange={handleRatingChange}
+                />
+              </div>
+              <Input
+                name="reviewMsg"
+                placeholder="Write a review"
+                value={reviewMsg}
+                onChange={(event) => setReviewMsg(event.target.value)}
+              />
+              <Button
+                disabled={reviewMsg.trim() === ""}
+                onClick={handleAddReview}
+              >
+                Add review
+              </Button>
             </div>
           </div>
         </div>
