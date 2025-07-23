@@ -17,7 +17,7 @@ export const CartWrapper = ({ cartItems, setOpenCartSheet }) => {
         }, 0)
       : 0;
   return (
-    <SheetContent className="sm:max-w-md lg:max-w-sm px-4">
+    <SheetContent className="sm:max-w-md lg:max-w-sm px-4 overflow-auto">
       <SheetHeader>
         <SheetTitle className="text-2xl font-bold">Your Cart</SheetTitle>
       </SheetHeader>
@@ -39,7 +39,7 @@ export const CartWrapper = ({ cartItems, setOpenCartSheet }) => {
       <Button onClick={() => {
         navigate("/shop/checkout")
         setOpenCartSheet(false)
-      }} className="w-full">
+      }} className="w-full mb-5">
         Checkout
       </Button>
     </SheetContent>

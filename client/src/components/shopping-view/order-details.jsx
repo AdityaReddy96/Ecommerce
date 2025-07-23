@@ -7,8 +7,8 @@ import { useSelector } from "react-redux";
 export const ShoppingOrderDetailsView = ({ orderDetails }) => {
   const { user } = useSelector((state) => state.auth);
   return (
-    <DialogContent className="sm:max-w-[600px]">
-      <div className="grid gap-6">
+    <DialogContent className="sm:max-w-[500px] overflow-y-auto max-h-[80vh]">
+      <div className="grid gap-6 mt-5">
         <div className="grid gap-2">
           <div className="flex items-center justify-between">
             <p className="font-medium">Order ID</p>
