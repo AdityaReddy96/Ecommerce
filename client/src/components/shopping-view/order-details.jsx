@@ -1,13 +1,17 @@
 import { Separator } from "../ui/separator";
 import { Label } from "../ui/label";
-import { DialogContent } from "../ui/dialog";
+import { DialogContent, DialogTitle } from "../ui/dialog";
 import { Badge } from "../ui/badge";
 import { useSelector } from "react-redux";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 export const ShoppingOrderDetailsView = ({ orderDetails }) => {
   const { user } = useSelector((state) => state.auth);
   return (
     <DialogContent className="sm:max-w-[500px] overflow-y-auto max-h-[80vh]">
+      <VisuallyHidden asChild>
+        <DialogTitle>Order Details</DialogTitle>
+      </VisuallyHidden>
       <div className="grid gap-6 mt-5">
         <div className="grid gap-2">
           <div className="flex items-center justify-between">
@@ -54,7 +58,7 @@ export const ShoppingOrderDetailsView = ({ orderDetails }) => {
                 {orderDetails?.cartItems && orderDetails?.cartItems.length > 0
                   ? orderDetails?.cartItems.map((cartItem) => {
                       return (
-                        <li className="grid grid-cols-3 gap-4 items-center">
+                        <li key={cartItem?._id} className="grid grid-cols-3 gap-4 items-center">
                           <span className="truncate">
                             Title: {cartItem?.title}
                           </span>

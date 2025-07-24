@@ -1,7 +1,7 @@
 import { StarIcon } from "lucide-react";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Button } from "../ui/button";
-import { Dialog, DialogContent } from "../ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "../ui/dialog";
 import { Separator } from "../ui/separator";
 import { Input } from "../ui/input";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,6 +12,7 @@ import { Label } from "../ui/label";
 import { Rating } from "../common/star-rating";
 import { useEffect, useState } from "react";
 import { addReviewsSlice, getReviewsSlice } from "@/store/shop/review-slice";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 export const ProductDetails = ({
   openDetails,
@@ -102,6 +103,9 @@ export const ProductDetails = ({
   return (
     <Dialog open={openDetails} onOpenChange={handleDetailsDialogClose}>
       <DialogContent className="grid grid-cols-2 gap-8 sm:p-12 max-w-[90vw] sm:max-w-[80vw] lg:max-w-[65vw]">
+        <VisuallyHidden asChild>
+          <DialogTitle>Product Details</DialogTitle>
+        </VisuallyHidden>
         <div className="relative overflow-hidden rounded-lg">
           <img
             src={productDetails?.image}

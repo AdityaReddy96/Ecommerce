@@ -71,9 +71,10 @@ const getCartItems = async (req, res) => {
     });
 
     if (!cart) {
-      return res.status(404).json({
-        success: false,
+      return res.status(200).json({
+        success: true,
         message: "Cart Not Found",
+        data: [],
       });
     }
 
@@ -200,7 +201,7 @@ const deleteCartItem = async (req, res) => {
     }
 
     cart.items = cart.items.filter(
-      (item) => item.productId._id.toString() !== productId 
+      (item) => item.productId._id.toString() !== productId
     );
 
     await cart.save();

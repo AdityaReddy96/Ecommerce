@@ -1,13 +1,20 @@
 import { Button } from "@/components/ui/button";
-import bannerOne from "../../assets/banner-1.jpg";
-import bannerTwo from "../../assets/banner-2.jpg";
-import bannerThree from "../../assets/banner-3.jpg";
+import bannerOne from "../../assets/banner-1.png";
+import bannerTwo from "../../assets/banner-2.png";
+import bannerFive from "../../assets/banner-5.png";
+import bannerSix from "../../assets/banner-6.png";
+import { GiFootTrip } from "react-icons/gi";
+import { SiNike, SiPuma } from "react-icons/si";
+import { CgAdidas } from "react-icons/cg";
+import wrognLogo from "../../assets/wrogn-brand.png";
+import hrxLogo from "../../assets/HRX-brand.jpg";
+import levisLogo from "../../assets/levi's-brand.png";
+
 import {
   BabyIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   Mars,
-  UmbrellaIcon,
   Venus,
   WatchIcon,
 } from "lucide-react";
@@ -19,7 +26,7 @@ import {
   getProductDetails,
 } from "@/store/shop/shop-products-silce";
 import { ShoppingProductTile } from "@/components/shopping-view/product-tile";
-import {useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { addToCartSlice, getCartItemSlice } from "@/store/shop/shop-cart-slice";
 import { toast } from "sonner";
 import { ProductDetails } from "@/components/shopping-view/product-details";
@@ -29,24 +36,37 @@ const categoryWithIcon = [
   { id: "women", label: "Women", icon: Venus },
   { id: "kids", label: "Kids", icon: BabyIcon },
   { id: "accessories", label: "Accessories", icon: WatchIcon },
-  { id: "footwear", label: "Footwear", icon: UmbrellaIcon },
+  { id: "footwear", label: "Footwear", icon: GiFootTrip },
 ];
 
 const brandWithIcon = [
-  { id: "nike", label: "Nike", icon: Mars },
-  { id: "adidas", label: "Adidas", icon: Mars },
-  { id: "puma", label: "Puma", icon: Mars },
-  { id: "wrogn", label: "Wrogn", icon: Mars },
-  { id: "hrx", label: "HRX", icon: Mars },
-  { id: "levis", label: "Levi's", icon: Mars },
+  { id: "nike", label: "Nike", icon: SiNike },
+  { id: "adidas", label: "Adidas", icon: CgAdidas },
+  { id: "puma", label: "Puma", icon: SiPuma },
+  {
+    id: "wrogn",
+    label: "Wrogn",
+    img: wrognLogo,
+  },
+  {
+    id: "hrx",
+    label: "HRX",
+    img: hrxLogo,
+  },
+  {
+    id: "levis",
+    label: "Levi's",
+    img: levisLogo,
+  },
 ];
 
 export const ShoppingHome = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const slides = [bannerOne, bannerTwo, bannerThree];
+  const slides = [bannerOne, bannerTwo, bannerFive, bannerSix];
   const { productList, productDetails } = useSelector(
     (state) => state.shopProducts
   );
+  const { featureImageList } = useSelector((state) => state.featureSlice);
   const [openDetails, setOpenDetails] = useState(false);
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -99,11 +119,15 @@ export const ShoppingHome = () => {
     if (productDetails !== null) setOpenDetails(true);
   }, [productDetails]);
 
+  // useEffect(() => {
+  //     dispatch(getFeatureImage());
+  //   }, [dispatch]);
+
   // console.log("productList", productList);
 
   return (
     <div className="flex flex-col min-h-screen">
-      <div className="relative w-full h-[600px] overflow-hidden">
+      <div className="relative w-full h-[800px] overflow-hidden">
         {slides.map((slide, index) => {
           return (
             <img
@@ -173,7 +197,15 @@ export const ShoppingHome = () => {
                   className="cursor-pointer hover: shadow-lg transition-shadow"
                 >
                   <CardContent className="flex flex-col items-center justify-center p-6">
-                    <brandItem.icon className="w-12 h-12 mb-4 text-primary" />
+                    {brandItem.icon ? (
+                      <brandItem.icon className="w-12 h-12 mb-4 text-primary" />
+                    ) : (
+                      <img
+                        src={brandItem.img}
+                        alt={brandItem.label}
+                        className="w-12 h-12 mb-4"
+                      />
+                    )}
                     <span className="font-bold">{brandItem.label}</span>
                   </CardContent>
                 </Card>
