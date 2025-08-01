@@ -1,8 +1,11 @@
 import { Button } from "@/components/ui/button";
-import bannerOne from "../../assets/banner-1.png";
 import bannerTwo from "../../assets/banner-2.png";
-import bannerFive from "../../assets/banner-5.png";
-import bannerSix from "../../assets/banner-6.png";
+import bannerOne from "../../assets/banner-1.png";
+import bannerThree from "../../assets/banner-3.jpg";
+// import bannerFour from "../../assets/banner-4.png";
+// import bannerFive from "../../assets/banner-5.png";
+// import bannerSeven from "../../assets/banner-7.png";
+// import bannerEight from "../../assets/banner-8.png"; 
 import { GiFootTrip } from "react-icons/gi";
 import { SiNike, SiPuma } from "react-icons/si";
 import { CgAdidas } from "react-icons/cg";
@@ -62,7 +65,16 @@ const brandWithIcon = [
 
 export const ShoppingHome = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const slides = [bannerOne, bannerTwo, bannerFive, bannerSix];
+  const slides = [
+    bannerOne,
+    bannerTwo,
+    bannerThree,
+    // bannerFour,
+    // bannerSeven,
+    // bannerFive,
+    // bannerEight,
+    // bannerSix,
+  ];
   const { productList, productDetails } = useSelector(
     (state) => state.shopProducts
   );
@@ -79,6 +91,7 @@ export const ShoppingHome = () => {
     };
     sessionStorage.setItem("filters", JSON.stringify(homeCardFilter));
     navigate(`/shop/listing`);
+    window.scrollTo(0, 0);
   };
 
   const handleGetProductDetails = (getCurrProductId) => {
@@ -127,7 +140,7 @@ export const ShoppingHome = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <div className="relative w-full h-[800px] overflow-hidden">
+      <div className="relative w-full h-[600px] overflow-hidden">
         {slides.map((slide, index) => {
           return (
             <img

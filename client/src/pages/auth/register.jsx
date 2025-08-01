@@ -1,6 +1,7 @@
 import { CommonForm } from "@/components/common/form";
 import { registerFormControls } from "@/config";
 import { registerUser } from "@/store/auth-slice";
+import { ShoppingBag } from "lucide-react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -30,20 +31,12 @@ export const AuthRegister = () => {
     });
   };
   return (
-    <div className="mx-auto w-full max-w-md space-y-6">
-      <div className="text-center">
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">
+    <div className="space-y-6">
+      <div className="flex flex-col items-center text-center">
+        <ShoppingBag className="h-12 w-12 mb-4" />
+        <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
           Create new account
         </h1>
-        <p className="mt-2">
-          Already have an account
-          <Link
-            className="font-medium ml-2 text-primary hover:underline"
-            to="/auth/login"
-          >
-            Login
-          </Link>
-        </p>
       </div>
       <CommonForm
         formControls={registerFormControls}
@@ -52,6 +45,15 @@ export const AuthRegister = () => {
         setFormData={setFormData}
         onSubmit={onSubmit}
       />
+      <p className="px-8 text-center text-sm text-muted-foreground">
+          Already have an account{" "}
+          <Link
+            to="/auth/login"
+            className="hover:underline underline-offset-4 text-primary font-bold"
+          >
+            Login
+          </Link>
+        </p>
     </div>
   );
 };

@@ -38,6 +38,15 @@ const shopProductSlice = createSlice({
     setProductDetails: (state) => {
       state.productDetails = null;
     },
+    updateProductInList: (state, action) => {
+    const updatedProduct = action.payload;
+    state.productList = state.productList.map(product => 
+      product._id === updatedProduct._id ? updatedProduct : product
+    );
+    if (state.productDetails?._id === updatedProduct._id) {
+      state.productDetails = updatedProduct;
+    }
+  },
   },
   extraReducers: (builder) => {
     builder
@@ -57,7 +66,18 @@ const shopProductSlice = createSlice({
       })
       .addCase(getProductDetails.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.productDetails = action.payload.data;
+        const  updatedProduct = action.payload.data;
+        state.productDetails = updatedProduct; // This updates the details view
+
+        // 👇 START: ADD THIS LOGIC
+        // Find the product in the list and update it
+        const index = state.productList.findIndex(
+          (product) => product._id === updatedProduct._id
+        );
+
+        if (index !== -1) {
+          state.productList[index] = updatedProduct;
+        }
       })
       .addCase(getProductDetails.rejected, (state, action) => {
         state.isLoading = false;
@@ -66,5 +86,5 @@ const shopProductSlice = createSlice({
   },
 });
 
-export const { setProductDetails } = shopProductSlice.actions;
+export const { setProductDetails, updateProductInList } = shopProductSlice.actions;
 export default shopProductSlice.reducer;

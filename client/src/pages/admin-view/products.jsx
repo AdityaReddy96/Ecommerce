@@ -83,6 +83,7 @@ export const AdminProducts = () => {
     dispatch(deleteProduct(deleteProductId)).then((data) => {
       if (data?.payload?.success) {
         dispatch(getAllProducts());
+        toast.success("Product Deleted");
       }
     });
   };

@@ -51,6 +51,7 @@ export const addProductReview = async (req, res) => {
       success: true,
       message: "Review Added Successfully",
       data: newReview,
+      product: await Product.findById(productId),
     });
   } catch (error) {
     console.log(error);
@@ -77,6 +78,51 @@ export const getProductReview = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Error occurred in getProductReview",
+    });
+  }
+};
+
+// Add to product-review-controller.js
+export const deleteReview = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // First get the review to find the productId
+    const review = await Review.findById(id);
+    if (!review) {
+      return res.status(404).json({
+        success: false,
+        message: "Review not found",
+      });
+    }
+
+    const { productId } = review;
+
+    // Delete the review
+    await Review.findByIdAndDelete(id);
+
+    // Recalculate average review
+    const reviews = await Review.find({ productId });
+    let averageReview = 0;
+
+    if (reviews.length > 0) {
+      averageReview =
+        reviews.reduce((sum, reviewItem) => sum + reviewItem.reviewValue, 0) /
+        reviews.length;
+    }
+
+    // Update the product's average review
+    await Product.findByIdAndUpdate(productId, { averageReview });
+
+    res.status(200).json({
+      success: true,
+      message: "Review deleted successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Error occurred in deleteReview",
     });
   }
 };

@@ -10,8 +10,12 @@ const ProductSchema = mongoose.Schema(
     price: Number,
     salePrice: Number,
     totalStock: Number,
+    averageReview: {
+      type: Number,
+      default: 0,
+    },
   },
   { timeStamps: true }
 );
 
-export const Product = mongoose.model("Product", ProductSchema)
+export const Product = mongoose.model("Product", ProductSchema);

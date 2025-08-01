@@ -2,6 +2,11 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { brandOptionsMap, categoryOptionsMap } from "@/config";
+import { Rating } from "../common/star-rating";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getProductDetails } from "@/store/shop/shop-products-silce";
+import { getReviewsSlice } from "@/store/shop/review-slice";
 
 export const ShoppingProductTile = ({
   product,
@@ -58,6 +63,20 @@ export const ShoppingProductTile = ({
                 ${product?.salePrice}
               </span>
             ) : null}
+          </div>
+          <div className="flex mb-2 h-[24px]">
+            {product?.averageReview > 0 ? (
+              <>
+                <Rating rating={Math.round(product?.averageReview)} />
+                <span className="text-lg text-muted-foreground mt-1.5">
+                  ({Math.round(product?.averageReview)})
+                </span>
+              </>
+            ) : (
+              <span className="text-muted-foreground text-sm">
+                ---
+              </span>
+            )}
           </div>
         </CardContent>
       </div>
