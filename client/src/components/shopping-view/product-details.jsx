@@ -7,7 +7,11 @@ import { Input } from "../ui/input";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCartSlice, getCartItemSlice } from "@/store/shop/shop-cart-slice";
 import { toast } from "sonner";
-import { setProductDetails } from "@/store/shop/shop-products-silce";
+import {
+  getProductDetails,
+  setProductDetails,
+  updateProductInList,
+} from "@/store/shop/shop-products-silce";
 import { Label } from "../ui/label";
 import { Rating } from "../common/star-rating";
 import { useEffect, useState } from "react";
@@ -42,7 +46,13 @@ export const ProductDetails = ({
     ).then((data) => {
       if (data?.payload?.success) {
         dispatch(getReviewsSlice(productDetails?._id));
+        dispatch(getProductDetails(productDetails?._id)).then((productData) => {
+          // Update the product in the list with new average review
+          dispatch(updateProductInList(productData.payload.data));
+        });
         toast.success("Review Added Successfully");
+        setReviewMsg("");
+        setRating(0);
       }
     });
   };

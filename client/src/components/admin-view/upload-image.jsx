@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 import { Button } from "../ui/button";
 import axios from "axios";
 import { SpinnerLoader } from "@/assets/loader";
+import imageCompression from "browser-image-compression"; // ⬅️ Import at top
 
 export const ProductImageUpload = ({
   imageFile,
@@ -14,13 +15,31 @@ export const ProductImageUpload = ({
   imageLoaderState,
   setImageLoaderState,
   isEditMode,
-  isCustomStyling = false
+  isCustomStyling = false,
 }) => {
   const inputRef = useRef(null);
 
-  const handleImageFileChange = (event) => {
+  // const handleImageFileChange = (event) => {
+  //   const selectedFile = event.target.files?.[0];
+  //   if (selectedFile) setImageFile(selectedFile);
+  // };
+
+  const handleImageFileChange = async (event) => {
     const selectedFile = event.target.files?.[0];
-    if (selectedFile) setImageFile(selectedFile);
+    if (!selectedFile) return;
+
+    const options = {
+      maxWidthOrHeight: 1024, // Resize to max 1024px
+      useWebWorker: true,
+      initialQuality: 0.9, // Slight compression
+    };
+
+    try {
+      const compressedFile = await imageCompression(selectedFile, options);
+      setImageFile(compressedFile); // ⬅️ Set the compressed file to state
+    } catch (err) {
+      console.error("Image compression failed:", err);
+    }
   };
 
   const handleDragOver = (event) => {

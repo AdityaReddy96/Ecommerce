@@ -6,7 +6,7 @@ import {
   User,
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "../ui/sheet";
 import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import { shoppingViewHeaderMenuItems } from "@/config";
@@ -24,12 +24,16 @@ import { CartWrapper } from "./cart-wrapper";
 import { useEffect, useState } from "react";
 import { getCartItemSlice } from "@/store/shop/shop-cart-slice";
 import { Label } from "../ui/label";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { FaSearch } from "react-icons/fa";
 
-const MenuItems = () => {
+const MenuItems = ({ setOpenMenuSheet, setOpenCartSheet }) => {
   const navigate = useNavigate();
 
   const handleMenuNavigation = (menuItem) => {
     sessionStorage.removeItem("filters");
+    setOpenMenuSheet(false); // Close menu sheet when navigating
+    setOpenCartSheet(false); // Close cart sheet when navigating
 
     const menuFilter =
       menuItem.id !== "home" &&
@@ -52,23 +56,34 @@ const MenuItems = () => {
   };
   return (
     <nav className="flex flex-col mb-3 lg:mb-0 lg:items-center gap-6 lg:flex-row">
-      {shoppingViewHeaderMenuItems.map((menuItem) => (
-        <Label
-          onClick={() => handleMenuNavigation(menuItem)}
-          key={menuItem.id}
-          className="text-sm font-medium cursor-pointer"
-        >
-          {menuItem.label}
-        </Label>
-      ))}
+      {shoppingViewHeaderMenuItems.map((menuItem) =>
+        menuItem.id === "search" ? (
+          <FaSearch
+            key={menuItem.id}
+            onClick={() => handleMenuNavigation(menuItem)}
+            className="h-6 w-6 cursor-pointer"
+          />
+        ) : (
+          <Label
+            onClick={() => handleMenuNavigation(menuItem)}
+            key={menuItem.id}
+            className="text-sm font-medium cursor-pointer"
+          >
+            {menuItem.label}
+          </Label>
+        )
+      )}
     </nav>
   );
 };
 
-const HeaderRightContent = () => {
+const HeaderRightContent = ({
+  setOpenMenuSheet,
+  openCartSheet,
+  setOpenCartSheet,
+}) => {
   const { user } = useSelector((state) => state.auth);
   const { cartItems } = useSelector((state) => state.shoppingCart);
-  const [openCartSheet, setOpenCartSheet] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -80,24 +95,22 @@ const HeaderRightContent = () => {
     dispatch(getCartItemSlice(user?.id));
   }, [dispatch]);
 
-  // console.log("cartItems Aditya", cartItems);
-
   return (
-    <div className="flex lg:items-center lg:flex-row flex-col gap-4 ">
-      <Sheet
-        open={openCartSheet}
-        onOpenChange={() => {
-          setOpenCartSheet(false);
-        }}
-      >
+    <div className="flex lg:items-center lg:flex-row flex-col gap-4">
+      <Sheet open={openCartSheet} onOpenChange={setOpenCartSheet}>
         <Button
-          onClick={() => setOpenCartSheet(true)}
+          onClick={() => {
+            setOpenCartSheet(true);
+            setOpenMenuSheet(false); // Close menu sheet when opening cart
+          }}
           variant="outline"
-          // size="icon"
+          size="icon"
           className="relative"
         >
           <ShoppingCart className="h-6 w-6" />
-          <span className="absolute top-[-3px] right-0 font-bold">{cartItems?.items?.length || "0"}</span>
+          <span className="absolute top-[-3px] right-0 font-bold">
+            {cartItems?.items?.length || "0"}
+          </span>
           <span className="sr-only">User Cart</span>
         </Button>
         <CartWrapper
@@ -143,7 +156,8 @@ const HeaderRightContent = () => {
 
 export const ShoppingHeader = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
-  //   console.log("user : ", user);
+  const [openMenuSheet, setOpenMenuSheet] = useState(false); // For mobile menu
+  const [openCartSheet, setOpenCartSheet] = useState(false); // For cart
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
@@ -152,23 +166,43 @@ export const ShoppingHeader = () => {
           <ShoppingBag className="h-6 w-6" />
           <span className="font-bold">Ecommerce</span>
         </Link>
-        <Sheet>
+
+        {/* Mobile Menu Sheet */}
+        <Sheet open={openMenuSheet} onOpenChange={setOpenMenuSheet}>
           <SheetTrigger asChild>
             <Button variant="outline" size="icon" className="lg:hidden">
               <AlignJustify className="h-6 w-6" />
-              <span className="sr-only">Toggle Shopping Heeader Menu</span>
+              <span className="sr-only">Toggle Shopping Header Menu</span>
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="w-full max-w-xs p-4">
-            <MenuItems />
-            <HeaderRightContent />
+            <VisuallyHidden asChild>
+              <SheetTitle>Product Details</SheetTitle>
+            </VisuallyHidden>
+            <MenuItems
+              setOpenMenuSheet={setOpenMenuSheet}
+              setOpenCartSheet={setOpenCartSheet}
+            />
+            <HeaderRightContent
+              setOpenMenuSheet={setOpenMenuSheet}
+              openCartSheet={openCartSheet}
+              setOpenCartSheet={setOpenCartSheet}
+            />
           </SheetContent>
         </Sheet>
+
         <div className="hidden lg:block">
-          <MenuItems />
+          <MenuItems
+            setOpenMenuSheet={setOpenMenuSheet}
+            setOpenCartSheet={setOpenCartSheet}
+          />
         </div>
         <div className="hidden lg:block">
-          <HeaderRightContent />
+          <HeaderRightContent
+            setOpenMenuSheet={setOpenMenuSheet}
+            openCartSheet={openCartSheet}
+            setOpenCartSheet={setOpenCartSheet}
+          />
         </div>
       </div>
     </header>
