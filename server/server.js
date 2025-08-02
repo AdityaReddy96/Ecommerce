@@ -13,7 +13,7 @@ import ShopCartRouter from "./routes/shop/cart-routes.js";
 import addressRouter from "./routes/shop/address-routes.js";
 import shopOrderRouter from "./routes/shop/order-routes.js";
 import shopSearchRouter from "./routes/shop/search-routes.js";
-import shopReviewRouter from "./routes/shop/review-routes.js";  
+import shopReviewRouter from "./routes/shop/review-routes.js";
 
 import commonFeatureRouter from "./routes/admin/feature-routes.js";
 
@@ -37,7 +37,8 @@ mongoose
 // CORS Configuration
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    // origin: "http://localhost:5173",
+    origin: "https://ecommerce-frontend-five-chi.vercel.app/",
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: [
       "Content-Type",
