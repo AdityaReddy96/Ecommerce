@@ -52,6 +52,11 @@ app.use(
 
 app.use(cookieParser());
 app.use(express.json());
+
+app.get("/", (res) => {
+  res.send("Your Server is running...!");
+});
+
 app.use("/api/auth", authRegisterRouter);
 app.use("/api/auth", authLoginRouter);
 
