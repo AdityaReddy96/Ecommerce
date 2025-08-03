@@ -10,7 +10,7 @@ export const addReviewsSlice = createAsyncThunk(
   "/order/addReviewsSlice",
   async (formData) => {
     const response = await axios.post(
-      "http://localhost:8000/api/shop/review/add",
+      `${import.meta.env.VITE_BACKEND_URL}/api/shop/review/add`,
       formData
     );
     return response.data;
@@ -21,7 +21,7 @@ export const getReviewsSlice = createAsyncThunk(
   "/order/getReviewsSlice",
   async (productId) => {
     const response = await axios.get(
-      `http://localhost:8000/api/shop/review/${productId}`
+      `${import.meta.env.VITE_BACKEND_URL}/api/shop/review/${productId}`
     );
     return response.data;
   }

@@ -10,7 +10,7 @@ export const addAddressSlice = createAsyncThunk(
   "/address/addAddressSlice",
   async (formData) => {
     const response = await axios.post(
-      "http://localhost:8000/api/shop/address/add",
+      `${import.meta.env.VITE_BACKEND_URL}/api/shop/address/add`,
       formData
     );
     return response.data;
@@ -21,7 +21,7 @@ export const getAddressSlice = createAsyncThunk(
   "/address/getAddressSlice",
   async (userId) => {
     const response = await axios.get(
-      `http://localhost:8000/api/shop/address/get/${userId}`
+      `${import.meta.env.VITE_BACKEND_URL}/shop/address/get/${userId}`
     );
     return response.data;
   }
@@ -31,7 +31,7 @@ export const updateAddressSlice = createAsyncThunk(
   "/address/updateAddressSlice",
   async ({ userId, addressId, formData }) => {
     const response = await axios.put(
-      `http://localhost:8000/api/shop/address/update/${userId}/${addressId}`,
+      `${import.meta.env.VITE_BACKEND_URL}/api/shop/address/update/${userId}/${addressId}`,
       formData
     );
     return response.data;
@@ -42,7 +42,7 @@ export const deleteAddressSlice = createAsyncThunk(
   "/address/deleteAddressSlice",
   async ({ userId, addressId }) => {
     const response = await axios.delete(
-      `http://localhost:8000/api/shop/address/delete/${userId}/${addressId}`
+      `${import.meta.env.VITE_BACKEND_URL}/api/shop/address/delete/${userId}/${addressId}`
     );
     return response.data;
   }
