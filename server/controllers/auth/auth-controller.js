@@ -1,6 +1,9 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { User } from "../../models/User.js";
+import { config } from "dotenv";
+
+config({ path: "./.env" });
 
 // User Registration and Saving into database.
 const registerUser = async (req, res) => {
@@ -74,7 +77,7 @@ const loginUser = async (req, res) => {
         email: checkUser.email,
         userName: checkUser.userName,
       },
-      "CLIENT_SECRET_KEY",
+      process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
 
@@ -118,7 +121,7 @@ const authMiddleware = (req, res, next) => {
   }
 
   try {
-    const decodedToken = jwt.verify(token, "CLIENT_SECRET_KEY");
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
     // console.log(decodedToken);
     req.user = decodedToken;
     next();
