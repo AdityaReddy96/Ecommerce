@@ -5,7 +5,7 @@ A full-featured e-commerce web application built using the **MERN stack** (Mongo
 ## 🚀 Live Demo
 
 🔗 [Live Site URL](https://ecommerce-frontend-two-gamma.vercel.app/)  
-🔗 [Client GitHub Repo](https://github.com/AdityaReddy96/Ecommerce.git)
+🔗 [GitHub Repo](https://github.com/AdityaReddy96/Ecommerce.git)
 
 ---
 
@@ -24,6 +24,7 @@ A full-featured e-commerce web application built using the **MERN stack** (Mongo
 - React
 - Redux Toolkit
 - Tailwind CSS
+- Shadcn UI
 - Axios
 
 **Backend**:
@@ -97,14 +98,17 @@ Ecommerce/
 
 **Backend**
 
-````bash
+```bash
 cd server
 npm install
+```
 
 **Frontend**
+
 ```bash
 cd ../client
 npm install
+```
 
 3. **Setup Environment Variables**
 
@@ -122,7 +126,7 @@ CLOUDINARY_API_KEY=your_api_key
 CLOUDINARY_API_SECRET=your_api_secret
 PAYPAL_CLIENT_ID=your_paypal_client_id
 PAYPAL_SECRET_KEY=your_paypal_secret_key
-````
+```
 
 # Client `.env`
 
@@ -142,7 +146,7 @@ npm run dev
 ### Frontend (in another terminal)
 
 ```bash
-cd ../client
+cd client
 npm run dev
 ```
 
