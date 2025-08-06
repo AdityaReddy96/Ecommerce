@@ -115,7 +115,7 @@ npm install
 Create a .env file in both client/ and server/ as shown above.<br/>
 Use MongoDB Atlas or your local MongoDB URI.
 
-# Server `.env`
+**Server `.env`**
 
 ```env
 PORT=PORT_NUMBER
@@ -128,7 +128,7 @@ PAYPAL_CLIENT_ID=your_paypal_client_id
 PAYPAL_SECRET_KEY=your_paypal_secret_key
 ```
 
-# Client `.env`
+**Client `.env`**
 
 ```env
 VITE_BACKEND_URL=your_backend_url
@@ -149,9 +149,6 @@ npm run dev
 cd client
 npm run dev
 ```
-
-**Client will start at http://localhost:5173**<br/>
-**Server will run on http://localhost:5000**
 
 ## 🙋‍♂️ Author
 
