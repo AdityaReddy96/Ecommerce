@@ -106,7 +106,7 @@ npm install
 **Frontend**
 
 ```bash
-cd ../client
+cd client
 npm install
 ```
 
