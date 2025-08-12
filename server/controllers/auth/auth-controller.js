@@ -82,7 +82,7 @@ const loginUser = async (req, res) => {
     );
 
     // Assigning token to cookie in browser
-    res.cookie("token", token, { httpOnly: true, secure: false }).json({
+    res.cookie("token", token, { httpOnly: true, secure: true }).json({
       success: true,
       message: "Logged In Successfully",
       user: {
