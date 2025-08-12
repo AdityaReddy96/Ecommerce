@@ -38,7 +38,7 @@ const registerUser = async (req, res) => {
     console.log(error);
     res.status(500).json({
       success: false,
-      message: "Internal Server Error.",
+      message: "Error Occured in registerUser.",
     });
   }
 };
@@ -96,7 +96,7 @@ const loginUser = async (req, res) => {
     console.log(error);
     res.status(500).json({
       success: false,
-      message: "Internal Server Error",
+      message: "Error occured in loginUser",
     });
   }
 };
@@ -116,7 +116,7 @@ const authMiddleware = (req, res, next) => {
   if (!token) {
     return res.status(401).json({
       success: false,
-      message: "Unauthorized user",
+      message: "Token is not present, Unauthorized user",
     });
   }
 
@@ -128,7 +128,7 @@ const authMiddleware = (req, res, next) => {
   } catch (error) {
     res.status(401).json({
       success: false,
-      message: "Unauthorized user",
+      message: "Error Occurred in authMiddleware",
     });
   }
 };
