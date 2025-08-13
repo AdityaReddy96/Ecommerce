@@ -111,10 +111,17 @@ const loginUser = async (req, res) => {
 
 // Logout
 const logoutUser = (req, res) => {
-  res.clearCookie("token").json({
-    success: true,
-    message: "Logged out succcessfully",
-  });
+  res
+    .clearCookie("token", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      path: "/",
+    })
+    .json({
+      success: true,
+      message: "Logged out succcessfully",
+    });
 };
 
 // Auth Middleware (Verifying user at each route)
