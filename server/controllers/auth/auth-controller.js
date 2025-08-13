@@ -82,16 +82,23 @@ const loginUser = async (req, res) => {
     );
 
     // Assigning token to cookie in browser
-    res.cookie("token", token, { httpOnly: true, secure: true }).json({
-      success: true,
-      message: "Logged In Successfully",
-      user: {
-        id: checkUser._id,
-        role: checkUser.role,
-        email: checkUser.email,
-        userName: checkUser.userName,
-      },
-    });
+    res
+      .cookie("token", token, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "None",
+        maxAge: 60 * 60 * 1000, // 1 hour
+      })
+      .json({
+        success: true,
+        message: "Logged In Successfully",
+        user: {
+          id: checkUser._id,
+          role: checkUser.role,
+          email: checkUser.email,
+          userName: checkUser.userName,
+        },
+      });
   } catch (error) {
     console.log(error);
     res.status(500).json({
